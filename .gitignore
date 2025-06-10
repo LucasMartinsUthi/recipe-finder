@@ -2,6 +2,11 @@
 
 # dependencies
 app/node_modules
+app/.next
+app/.cache
+app/target
+app/dist
+
 server/node_modules
 /.pnp
 .pnp.js
