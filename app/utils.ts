@@ -3,4 +3,5 @@ export type Recipe = {
     recipe_name: string
     ingredients_required: string[]
     cooking_instructions: string
+    image?: string
 };

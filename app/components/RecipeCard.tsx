@@ -7,9 +7,10 @@ import Star from '@/public/star-regular.svg'
 type Props = {
     recipe: Recipe
     search: string
+    handleOpen: (id: string) => void
 }
 
-export default function RecipeCard({ recipe, search }: Props) {
+export default function RecipeCard({ recipe, search, handleOpen }: Props) {
     const [isFavorite, setIsFavorite] = useState(false)
 
     useEffect(() => {
@@ -33,40 +34,42 @@ export default function RecipeCard({ recipe, search }: Props) {
             updatedFavorites = [...stored, recipe._id]
         }
 
-        console.log({ recipe })
-        console.log({ updatedFavorites })
-
         localStorage.setItem('favoriteRecipes', JSON.stringify(updatedFavorites))
         setIsFavorite(!isFavorite)
     }
 
     return (
-        <li
-            key={recipe.id}
-            className="p-4 bg-white rounded-xl shadow-md border border-gray-200"
-        >
-            <div className="relative">
-                <button
-                    onClick={handleFavorite}
-                    className="absolute top-0 right-0 p-1 transition-transform duration-200 hover:scale-110"
-                >
-                    <Image src={isFavorite ? StartSolid : Star} alt="Favorite" width={24} height={24} />
-                </button>
+        <div className="relative">
+            <button
+                onClick={handleFavorite}
+                className="absolute top-0 right-0 p-1 transition-transform duration-200 hover:scale-110 p-4"
+            >
+                <Image src={isFavorite ? StartSolid : Star} alt="Favorite" width={24} height={24} />
+            </button>
+            <li
+                key={recipe._id}
+                className="p-4 bg-white rounded-xl shadow-md border border-gray-200"
+                onClick={() => handleOpen(recipe._id)}
+            >
 
-                <h2 className="text-lg font-semibold text-gray-800">
+                <h2 className="text-lg font-semibold text-gray-800 max-w-md">
                     {recipe.recipe_name}
                 </h2>
-            </div>
 
-            {
-                found_ingredients.length > 0 &&
-                <p
-                    className="text-sm text-gray-600 truncate whitespace-nowrap overflow-hidden"
-                    title={found_ingredients}
-                >
-                    {found_ingredients}
-                </p>
-            }
-        </li >
+                <div className="flex flex-col items-center py-2">
+                    <Image src={recipe.image || '/placeholder.png'} alt={recipe.recipe_name} width={80} height={80} className="mt-2 rounded-lg object-cover" />
+                </div>
+
+                {
+                    found_ingredients.length > 0 &&
+                    <p
+                        className="text-sm text-gray-600 truncate whitespace-nowrap overflow-hidden"
+                        title={found_ingredients}
+                    >
+                        {found_ingredients}
+                    </p>
+                }
+            </li >
+        </div>
     )
 }
